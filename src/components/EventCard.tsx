@@ -1,6 +1,6 @@
-import { EventModel } from '@/Model';
+import { EventModel } from '@/types/Model';
 import Link from 'next/link';
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 
 export type EventCardProps = {
     event: EventModel
@@ -9,7 +9,7 @@ export type EventCardProps = {
 function EventCard(props: EventCardProps){
     
     return (
-        <Link href={`/event/${props.event.id}/spots-layout`}>
+        <Link href={`/events/${props.event.id}/spots-layout`}>
         <div className="flex w-[277px] flex-col rounded-2xl bg-secondary">
           <img src={props.event.image_url} alt={props.event.name}/>
           <div className="flex flex-col gap-y-2 px-4 py-6">

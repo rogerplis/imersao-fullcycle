@@ -23,7 +23,7 @@ export default function LoginForm() {
   return (
     <form
       onSubmit={login}
-      className="bg-white p-12 rounded-lg w-96 max-w-full flex flex-col justify-center items-center gap-2"
+      className="p-12 rounded-lg w-96 max-w-full flex flex-col justify-center items-center gap-2"
     >
       <h2 className="text-xl font-bold mb-3">Faça seu Login</h2>
       <input
