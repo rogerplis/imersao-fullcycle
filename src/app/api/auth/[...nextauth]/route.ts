@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { cookies } from "next/headers";
+import { User } from "next-auth";
 
 const handler = NextAuth({
   pages: {
@@ -13,12 +14,12 @@ const handler = NextAuth({
         email: { label: "Email", type: "email", placeholder: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials): Promise<User | null> {
         if (!credentials) {
           return null;
         }
         try {
-          const response = await fetch("http://127.0.0.1/auth/login", {
+          const response = await fetch("http://localhost:8080/api/v1/auth/authenticate", {
             method: "POST",
             body: JSON.stringify({
               email: credentials.email,
@@ -26,16 +27,21 @@ const handler = NextAuth({
             }),
             headers: { "Content-Type": "application/json" },
           });
-          if (response.status !== 200) return null;
+          if (response.status !== 200) {
+            console.log(response, "error");
+            return null;
+          }
           const authData = await response.json();
           console.log(authData);
-          if (!authData.access_token || !authData.user) return "Sem usuario";
-          cookies().set("access_token", authData.access_token);
+          if (!authData.token || !authData.user) {
+            return null;
+          }
+          cookies().set("access_token", authData.token);
           return {
             id: `${authData.user.id}`,
             email: `${authData.user.email}`,
-            name: `${authData.user.nome}`,
-            image: ''
+            name: `${authData.user.firstName} ${authData.user.lastName}`,
+            image: "",
           };
         } catch (e) {
           console.log(e);
