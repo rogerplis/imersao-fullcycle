@@ -40,12 +40,10 @@ export default function RootLayout({
         className={cn("min-h-scren bg-background font-sans antialiased", fontSans.variable)}
       >
         <Provider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>          
-          <div className="relative flex min-h-screen flex-col">
-            <SiteHeader/>            
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>         
+                      <SiteHeader/>            
             {children}
-          </div>
-          </ThemeProvider>
+                    </ThemeProvider>
         </Provider>
       </body>
     </html>

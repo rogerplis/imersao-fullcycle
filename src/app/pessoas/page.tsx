@@ -13,6 +13,7 @@ export default function Produtos() {
 
   // Recupera o JWT dos cookies
   const jwt = getCookie("access_token");
+  
 
   // Função para buscar as pessoas da API
   async function getPessoas() {

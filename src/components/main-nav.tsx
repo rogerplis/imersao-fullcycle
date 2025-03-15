@@ -20,6 +20,12 @@ export function MainNav() {
       href: "/",
       external: false
     },
+    {
+      title: "produtos",
+      disabled: false,
+      href: "/products",
+      external: false
+    },
     {      
       title: "pessoas",
       disabled: false,
