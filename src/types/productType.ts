@@ -54,4 +54,31 @@ export interface Product {
     id: number
     name: string
   }
+  export interface ProductResponse{
+    id: number
+    name: string
+    price: number
+    description: string
+    sku: string
+    brand: string
+    model: string
+    color: string
+    size: string
+    gender: string
+    status: string
+    type: string
+    netWeight: number
+    grossWeight: number
+    weightUnit: string
+    measurementUnit: string
+    length: number
+    width: number
+    height: number
+    volume: number
+    categories: number[]
+    images: Image[]
+    attributes: Attribute[]
+    variations: Variation[]
+    regulations: Regulation[]
+  }
   
