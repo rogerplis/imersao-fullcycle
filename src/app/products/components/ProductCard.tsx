@@ -9,6 +9,7 @@ import {
   } from "@/components/ui/card"
 import { ProductResponse } from "@/types/productType";
 import Image from "next/image";
+import Link from "next/link";
   
 
 export type ProductCardProps = {
@@ -24,6 +25,7 @@ const ProductCard = (props: ProductCardProps) => {
                 src={imageCapa}
                 alt={props.product.name}
                 layout="fill"
+                objectPosition="center"
                 objectFit="cover"
                 className="transition-transform duration-300 hover:scale-105"
             />       
@@ -31,21 +33,15 @@ const ProductCard = (props: ProductCardProps) => {
         </div>
         <CardHeader>
             <CardTitle className="text-lg font-semibold line-clamp-1">{props.product.name}</CardTitle>
-            <CardDescription>{props.product.description}</CardDescription>
+            <CardDescription>{props.product.categories[0].name}</CardDescription>
         </CardHeader>
         <CardContent>
-            {props.product.attributes.map((attribute) => {
-                return (
-                    <div key={attribute.name}>
-                        {attribute.name}: {attribute.value}
-                    </div>
-                    )
-                })
-
-            }
+            <p className="text-sm line-clamp-2">{props.product.categories[0].name}</p>
         </CardContent>
         <CardFooter>
-            <Button className="w-full">Veja os detalhes</Button>    
+            <Link href={`/products/${props.product.sku}`} className="w-full">
+                <Button className="w-full">Veja os detalhes</Button>
+            </Link>    
         </CardFooter>
 
     </Card> );

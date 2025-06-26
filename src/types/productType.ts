@@ -75,10 +75,8 @@ export interface Product {
     width: number
     height: number
     volume: number
-    categories: number[]
+    categories: Category[]
     images: Image[]
-    attributes: Attribute[]
-    variations: Variation[]
-    regulations: Regulation[]
+    
   }
   

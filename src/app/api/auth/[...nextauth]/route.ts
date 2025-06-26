@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { cookies } from "next/headers";
 import { User } from "next-auth";
+import { baseUrl } from "@/lib/utils";
 
 const handler = NextAuth({
   pages: {
@@ -19,7 +20,7 @@ const handler = NextAuth({
           return null;
         }
         try {
-          const response = await fetch("http://localhost:8080/api/v1/auth/authenticate", {
+          const response = await fetch(`${baseUrl}/auth/authenticate`, {
             method: "POST",
             body: JSON.stringify({
               email: credentials.email,
