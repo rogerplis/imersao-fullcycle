@@ -23,6 +23,7 @@ export interface Product {
     attributes: Attribute[]
     variations: Variation[]
     regulations: Regulation[]
+    composedProducts: ComposedProduct[]
   }
   
   export interface Image {
@@ -54,6 +55,14 @@ export interface Product {
     id: number
     name: string
   }
+
+  export interface ComposedProduct {
+    id: number
+    name: string
+    price: number
+    quantity: number
+  }
+
   export interface ProductResponse{
     id: number
     name: string
@@ -77,6 +86,7 @@ export interface Product {
     volume: number
     categories: Category[]
     images: Image[]
+    composedProducts: ComposedProduct[]
     
   }
   

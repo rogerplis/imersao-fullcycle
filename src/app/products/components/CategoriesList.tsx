@@ -17,15 +17,16 @@ const Categories: React.FC<CategoriesProps> = ({ categories, selectedCategories,
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-4 m-auto">Categorias</h1>
+            <h2 className="text-1xl font-bold mb-4 m-auto">Filtre por Categoria</h2>
             <ul>
                 {categories?.map(category => (
-                    <li key={category.id} className="m-2 text-lg font-bold">
+                    <li key={category.id} className="m-2 text-lg font-bold gap-2 flex items-center">
                         <input
                             type="checkbox"
                             checked={selectedCategories.includes(category.id)}
                             onChange={() => handleCategoryChange(category.id)}
                         />
+                        
                         {category.name}
                     </li>
                 ))}

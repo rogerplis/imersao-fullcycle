@@ -20,6 +20,7 @@ const Produtos = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-4">Produtos</h1>
       <div className="flex justify-end mb-4">
         <Link href="/products/manage/new">
           <Button>Novo Produto</Button>

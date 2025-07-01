@@ -14,6 +14,12 @@ import { getCookie } from "cookies-next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 import { Check, ChevronsUpDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -92,7 +98,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit }) => {
     } : {
       // Default values for new product
       name: "", price: 0.01, description: "", sku: "", brand: "", model: "",
-      color: "", size: "", gender: "", status: "", type: "",
+      color: "", size: "", gender: "", status: "ATIVO", type: "SIMPLES",
       netWeight: 0, grossWeight: 0, weightUnit: "", measurementUnit: "",
       length: 0, width: 0, height: 0, volume: 0,
       categories: [],
@@ -171,6 +177,67 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit }) => {
               <Textarea id="description" {...register("description")} />
               {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
             </div>
+            <div>
+            <Label htmlFor="categories">Categorias</Label>
+            {loadingCategories ? (
+              <p>Carregando categorias...</p>
+            ) : (
+              <Popover open={openCategorySelect} onOpenChange={setOpenCategorySelect}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={openCategorySelect}
+                    className="w-full justify-between"
+                  >
+                    {watchedCategories && watchedCategories.length > 0
+                      ? watchedCategories.map(getCategoryName).join(", ")
+                      : "Selecione categorias..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                  <Command>
+                    <CommandInput placeholder="Buscar categoria..." />
+                    <CommandEmpty>Nenhuma categoria encontrada.</CommandEmpty>
+                    <CommandGroup>
+                      {categories.map((category) => (
+                        <CommandItem
+                          key={category.id}
+                          value={category.name}
+                          onSelect={() => {
+                            handleCategorySelect(category.id);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              watchedCategories?.includes(category.id)
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                          {category.name}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            )}
+            <div className="mt-2 flex flex-wrap gap-2">
+              {watchedCategories?.map((categoryId) => (
+                <Badge key={categoryId} variant="secondary">
+                  {getCategoryName(categoryId)}
+                  <X
+                    className="ml-1 h-3 w-3 cursor-pointer"
+                    onClick={() => handleCategorySelect(categoryId)}
+                  />
+                </Badge>
+              ))}
+            </div>
+            {errors.categories && <p className="text-red-500 text-sm">{errors.categories.message}</p>}
+          </div>
           </CardContent>
         </Card>
 
@@ -267,74 +334,21 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit }) => {
           </div>
         </CardContent>
       </Card>
+      <Tabs defaultValue="images" className="mt-4">
+        <TabsList>
+          <TabsTrigger value="images">Imagens</TabsTrigger>
+          <TabsTrigger value="attributes">Atributos</TabsTrigger>
+          <TabsTrigger value="regulations">Regulamentações</TabsTrigger>
+          <TabsTrigger value="variations">Variações</TabsTrigger>
+        </TabsList>
 
-      {/* Categorias e Imagens */}
+        <TabsContent value="images">
+          {/* Imagens */}
       <Card>
         <CardHeader>
-          <CardTitle>Categorias e Imagens</CardTitle>
+          <CardTitle>Imagens</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <Label htmlFor="categories">Categorias</Label>
-            {loadingCategories ? (
-              <p>Carregando categorias...</p>
-            ) : (
-              <Popover open={openCategorySelect} onOpenChange={setOpenCategorySelect}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={openCategorySelect}
-                    className="w-full justify-between"
-                  >
-                    {watchedCategories && watchedCategories.length > 0
-                      ? watchedCategories.map(getCategoryName).join(", ")
-                      : "Selecione categorias..."}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
-                  <Command>
-                    <CommandInput placeholder="Buscar categoria..." />
-                    <CommandEmpty>Nenhuma categoria encontrada.</CommandEmpty>
-                    <CommandGroup>
-                      {categories.map((category) => (
-                        <CommandItem
-                          key={category.id}
-                          value={category.name}
-                          onSelect={() => {
-                            handleCategorySelect(category.id);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              watchedCategories?.includes(category.id)
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {category.name}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            )}
-            <div className="mt-2 flex flex-wrap gap-2">
-              {watchedCategories?.map((categoryId) => (
-                <Badge key={categoryId} variant="secondary">
-                  {getCategoryName(categoryId)}
-                  <X
-                    className="ml-1 h-3 w-3 cursor-pointer"
-                    onClick={() => handleCategorySelect(categoryId)}
-                  />
-                </Badge>
-              ))}
-            </div>
-            {errors.categories && <p className="text-red-500 text-sm">{errors.categories.message}</p>}
-          </div>
+        <CardContent className="space-y-4">         
 
           <div>
             <Label>Imagens</Label>
@@ -365,7 +379,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit }) => {
           </div>
         </CardContent>
       </Card>
-
+        </TabsContent>
+        <TabsContent value="attributes">
       {/* Atributos */}
       <Card>
         <CardHeader>
@@ -400,6 +415,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit }) => {
           {errors.attributes && <p className="text-red-500 text-sm">{errors.attributes.message}</p>}
         </CardContent>
       </Card>
+        </TabsContent>
+        <TabsContent value="regulations">
 
       {/* Regulamentações */}
       <Card>
@@ -430,7 +447,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit }) => {
           {errors.regulations && <p className="text-red-500 text-sm">{errors.regulations.message}</p>}
         </CardContent>
       </Card>
-
+        </TabsContent>
+        <TabsContent value="variations">
       {/* Variações */}
       <Card>
         <CardHeader>
@@ -506,6 +524,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSubmit }) => {
           {errors.variations && <p className="text-red-500 text-sm">{errors.variations.message}</p>}
         </CardContent>
       </Card>
+        </TabsContent>
+      </Tabs>
+
+      {/* Botão de Envio */}
 
       <Button type="submit">Salvar Produto</Button>
     </form>

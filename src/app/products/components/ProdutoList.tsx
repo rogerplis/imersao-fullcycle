@@ -25,7 +25,7 @@ const Products: React.FC<ProductsProps> = ({ selectedCategories, categories }) =
             : '';
 
         const fetchUrl = `${baseUrl}/products/all${categoryParams}`;
-        console.log("ProductList - Fetching URL:", fetchUrl);
+        
 
         fetch(fetchUrl, {
             headers: {
@@ -34,22 +34,34 @@ const Products: React.FC<ProductsProps> = ({ selectedCategories, categories }) =
         })
             .then(response => {
                 console.log("ProductList - API Response Status:", response.status);
+                if (response.status === 204) {
+                    return null; 
+                }
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
             })
             .then(data => {
-                setProducts(data);
-                console.log("ProductList - Products fetched:", data);
+                setProducts(data || []);
+                if (data) {
+                    console.log("ProductList - Products fetched:", data);
+                } else {
+                    console.log("ProductList - No products found (204).");
+                }
             })
-            .catch(error => console.error("ProductList - Error fetching products:", error));
+            .catch(error => {
+                console.error("ProductList - Error fetching products:", error);
+                setProducts([]);
+            });
     }, [jwt, selectedCategories, categories]); // Adicionado 'categories' como dependência
 
     return (
-        <div>
-            <h1>Produtos</h1>
+        <div>            
             <p>Veja nossos produtos</p>
+            {products.length === 0 && (
+                <p className="text-red-500">Nenhum produto encontrado para as categorias selecionadas.</p>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {products.map((product) => (
                     <ProductCard key={product.id} product={product} />

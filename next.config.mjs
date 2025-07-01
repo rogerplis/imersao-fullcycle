@@ -23,6 +23,13 @@ const nextConfig = {
             pathname: '/**',
             search: '',
           },
+          {
+            protocol: 'https',
+            hostname: 'example.com',
+            port: '',
+            pathname: '/**',
+            search: '',
+          },
         ],
       },
     }
